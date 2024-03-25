@@ -8,10 +8,10 @@ body {
 }
 
 main {
-    min-width: 100vw;
     min-height: 100vh;
 
     display: flex;
+    flex-direction: column;
 }
 
 h1 {
@@ -192,4 +192,6 @@ template {
     outline: 0;
 
     background-color: transparent;
+
+    box-sizing: border-box;
 }

@@ -1,0 +1,33 @@
+.header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 20px;
+
+    background-color: coral;
+}
+
+.header__navigation {
+
+}
+
+.header__nav-list {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.header__nav-link {
+    color: #ffffff;
+
+    font-weight: 600;
+
+    font-size: 24px;
+
+    transition: .3s;
+
+    &:hover {
+        opacity: 0.7;
+    }
+}

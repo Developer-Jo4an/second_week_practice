@@ -6,9 +6,7 @@ import Main from '@/app/main/Main'
 export default function Index() {
     return (
         <Provider store={ store }>
-            <main>
-                <Main />
-            </main>
+            <Main />
         </Provider>
     )
 }

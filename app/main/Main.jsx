@@ -1,3 +1,4 @@
+'use client'
 import { useDispatch, useSelector } from 'react-redux'
 import { selectAppFull, setAppUsersAsync } from '@/redux/slices/appSlice'
 import User from '@/app/main/User'
@@ -6,9 +7,15 @@ import Loader from '@/helpers/components/loader/Loader'
 const Main = () => {
     const dispatch = useDispatch()
 
-    const { isLoading, error, users } = useSelector(selectAppFull)
+    const {
+		isLoading,
+	    error,
+	    users,
+	    usersInLocalStorage,
+	    usersInSessionStorage
+	} = useSelector(selectAppFull)
 
-    return (
+	return (
         <section className={ 'main' }>
             {
                 users.length ?
