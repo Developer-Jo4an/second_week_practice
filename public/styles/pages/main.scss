@@ -1,0 +1,58 @@
+.main {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.main__button {
+    margin: auto;
+}
+
+.main__user-list {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+
+    padding: 20px;
+
+}
+
+.main__user {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    grid-auto-rows: 100px 1fr 1fr;
+    gap: 20px;
+
+    padding: 20px;
+
+    border: 4px solid coral;
+    border-radius: 20px;
+}
+
+.user-card__user-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 20px;
+    border: 4px solid coral;
+
+    svg {
+        width: 65px;
+        height: 65px;
+    }
+}
+
+.user-card__main-info-list {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    padding: 4px 0;
+}
+
+.user-card__main-info-list > li + li p  {
+    font-weight: 600;
+}

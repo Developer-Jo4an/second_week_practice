@@ -1,9 +1,14 @@
-import Image from 'next/image'
+'use client'
+import { Provider } from 'react-redux'
+import { store } from '@/redux/store'
+import Main from '@/app/main/Main'
 
-export default function Home() {
+export default function Index() {
     return (
-        <main>
-            <h1>Home</h1>
-        </main>
+        <Provider store={ store }>
+            <main>
+                <Main />
+            </main>
+        </Provider>
     )
 }
