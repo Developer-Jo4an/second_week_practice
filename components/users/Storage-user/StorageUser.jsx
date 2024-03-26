@@ -1,8 +1,8 @@
-import { FaUserSecret } from 'react-icons/fa'
 import { memo } from 'react'
+import { FaUserSecret } from 'react-icons/fa'
 
 const StorageUser = memo(({ user, removeFromSt }) => {
-    const persChunks =
+	const persChunks =
         [[
             { phone: user.phone, username: user.username },
             { name: user.name, email: user.email, },
