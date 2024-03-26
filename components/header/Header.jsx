@@ -10,10 +10,10 @@ const Header = () => {
 						<Link className={'header__nav-link'} href={'/'}>Main</Link>
 					</li>
 					<li className={'header__nav-item'}>
-						<Link className={'header__nav-link'} href={'/session-storage'}>Local storage</Link>
+						<Link className={'header__nav-link'} href={'/local-storage'}>Local storage</Link>
 					</li>
 					<li className={'header__nav-item'}>
-						<Link className={'header__nav-link'} href={'/local-storage'}>Session storage</Link>
+						<Link className={'header__nav-link'} href={'/session-storage'}>Session storage</Link>
 					</li>
 				</ul>
 			</nav>

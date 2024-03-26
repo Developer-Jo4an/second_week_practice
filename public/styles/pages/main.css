@@ -1,0 +1,64 @@
+.main {
+  width: 1250px;
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  padding: 40px 20px;
+}
+
+.main__button {
+  align-self: center;
+}
+
+.main__user-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.main__user {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  border: 4px solid coral;
+  border-radius: 20px;
+}
+
+.user-card__info {
+  display: flex;
+  gap: 20px;
+}
+
+.user-card__user-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 20px;
+  border: 4px solid coral;
+  padding: 18px;
+}
+.user-card__user-icon svg {
+  width: 64px;
+  height: 64px;
+}
+
+.user-card__main-info-list {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 4px 0;
+}
+
+.user-card__username,
+.user-card__name {
+  font-weight: 600;
+}
+
+.user-card__buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/*# sourceMappingURL=main.css.map */

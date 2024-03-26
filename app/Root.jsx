@@ -1,12 +1,14 @@
 'use client'
 import { Provider } from 'react-redux'
 import { store } from '@/redux/store'
-import Main from '@/app/main/Main'
 
-export default function Index() {
+const Root = ({ children }) => {
+
     return (
         <Provider store={ store }>
-            <Main />
+            <main>{ children }</main>
         </Provider>
     )
 }
+
+export default Root

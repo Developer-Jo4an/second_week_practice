@@ -1,0 +1,94 @@
+// list
+.storage__list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    margin-top: 20px;
+}
+
+// storage-user
+.storage-user {
+    background-color: rgba(gray, 0.1);
+
+    border: 4px solid coral;
+
+    &:last-child {
+        border-bottom: 0;
+    }
+}
+
+// subject
+.storage__subject {
+    text-align: center;
+}
+
+.storage__none-users-message {
+    text-align: center;
+
+    font-size: 24px;
+}
+
+// header
+.storage-user-card__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 20px;
+
+    border-bottom: 4px solid coral;
+}
+
+// list
+.storage-user-card__info-list {
+    display: flex;
+
+    padding: 20px;
+
+    border-bottom: 4px solid coral;
+}
+
+// header
+
+.storage-user-card__sign {
+    width: 100px;
+    height: 100px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border: 4px solid coral;
+    border-radius: 20px;
+
+    background-color: #ffffff;
+
+    svg {
+        width: 65px;
+        height: 65px;
+    }
+}
+
+// personal data
+.info-chunk {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.info-chunk__piece {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.info-chunk__head {
+    font-weight: 600;
+    font-size: 20px;
+
+    &:first-letter {
+        text-transform: capitalize;
+    }
+}

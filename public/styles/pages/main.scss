@@ -1,12 +1,8 @@
-// wrapper
-.main {
-    width: 1250px;
+// subject
+.main__subject {
+    text-align: center;
 
-    align-self: center;
-    display: flex;
-    flex-direction: column;
-
-    padding: 40px 20px;
+    margin-bottom: 20px;
 }
 
 // button
@@ -21,11 +17,12 @@
     gap: 20px;
 }
 
-// user-card
+// main-user-card
 .main__user {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 20px;
 
     padding: 20px;
 
@@ -34,12 +31,12 @@
 }
 
 // info
-.user-card__info {
+.main-user-card__info {
     display: flex;
     gap: 20px;
 }
 
-.user-card__user-icon {
+.main-user-card__user-icon {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -55,7 +52,7 @@
     }
 }
 
-.user-card__main-info-list {
+.main-user-card__list {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -63,18 +60,23 @@
     padding: 4px 0;
 }
 
-.user-card__username,
-.user-card__name {
+.main-user-card__head {
     font-weight: 600;
+
+    &:first-letter {
+        text-transform: capitalize;
+    }
+}
+
+.main-user-card__item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
 }
 
 // buttons
-.user-card__buttons {
+.main-user-card__buttons {
     display: flex;
     flex-direction: column;
     gap: 10px;
-}
-
-.user-card__button {
-    
 }

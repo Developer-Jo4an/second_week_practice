@@ -1,35 +1,34 @@
 import { asyncThunkCreator, buildCreateSlice } from '@reduxjs/toolkit'
 import { AppController } from '@/js/controllers/AppController'
 import { AppRequestHandler } from '@/js/requestHandlers/AppRequestHandler'
+import { APP_USER_ADD, LOCAL_STORAGE } from '@/js/constants/appSliceConst'
 
 const createAsyncSlice = buildCreateSlice({ creators: { asyncThunk: asyncThunkCreator } })
-
-export const APP_USER_DEL = 'remove'
-export const APP_USER_ADD = 'add'
 
 const initialState = {
     isLoading: false,
     error: null,
     users: [],
-	usersInLocalStorage: [],
-	usersInSessionStorage: []
+    usersInLocalStorage: JSON.parse(localStorage.getItem('users') || '[]'),
+    usersInSessionStorage: JSON.parse(sessionStorage.getItem('users') || '[]')
 }
+
 
 export const appSlice = createAsyncSlice({
     name: 'appSlice',
     initialState,
     selectors: {
-		selectAppFull: sliceState => sliceState,
+        selectAppFull: sliceState => sliceState,
         selectAppRequest: sliceState => ({
-			isLoading: sliceState.isLoading,
-			error: sliceState.error,
-	        users: sliceState.users
+            isLoading: sliceState.isLoading,
+            error: sliceState.error,
+            users: sliceState.users
         }),
         selectAppIsLoading: sliceState => sliceState.isLoading,
         selectAppError: sliceState => sliceState.error,
         selectAppUsers: sliceState => sliceState.users,
-	    selectAppUsersInLS: sliceState => sliceState.usersInLocalStorage,
-	    selectAppUsersInSS: sliceState => sliceState.usersInSessionStorage,
+        selectAppUsersInLS: sliceState => sliceState.usersInLocalStorage,
+        selectAppUsersInSS: sliceState => sliceState.usersInSessionStorage,
     },
     reducers: create => ({
         setAppIsLoading: create.reducer((state, action) => {
@@ -42,34 +41,37 @@ export const appSlice = createAsyncSlice({
             AppController.getUsers,
             AppRequestHandler.getUsers
         ),
-	    setAppUserLocal: create.reducer((state, action) => {
-			const { actionType, userId } = action.payload
+        setAppUsersToStorage: create.reducer((state, action) => {
+            const { user, actionValue, storage } = action.payload
 
-		    switch (actionType) {
-			    case APP_USER_DEL : {
-				    return state.usersInLocalStorage = state.usersInLocalStorage.filter(({ id }) => id !== userId)
-			    }
-			    case APP_USER_ADD : {
-					const currentUser = state.users.find(({ id }) => id === userId)
-					return state.usersInLocalStorage.push(currentUser)
-			    }
-		    }
-	    })
+            const currentStorage = `usersIn${ storage }Storage`
+
+            const usersArr = actionValue === APP_USER_ADD ?
+                state[currentStorage] = [...state[currentStorage], user]
+                :
+                state[currentStorage] = state[currentStorage].filter(customer => customer.id !== user.id)
+
+            storage === LOCAL_STORAGE ?
+                localStorage.setItem('users', JSON.stringify(usersArr))
+                :
+                sessionStorage.setItem('users', JSON.stringify(usersArr))
+        }),
     })
 })
 
 export const {
-	selectAppFull,
-	selectAppRequest,
+    selectAppFull,
+    selectAppRequest,
     selectAppIsLoading,
     selectAppError,
     selectAppUsers,
-	selectAppUsersInLS,
-	selectAppUsersInSS
+    selectAppUsersInLS,
+    selectAppUsersInSS
 } = appSlice.selectors
 
 export const {
     setAppIsLoading,
     setAppError,
-    setAppUsersAsync
+    setAppUsersAsync,
+    setAppUsersToStorage
 } = appSlice.actions

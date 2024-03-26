@@ -1,0 +1,13 @@
+.page {
+    width: 1250px;
+
+    align-self: center;
+    display: flex;
+    flex-direction: column;
+
+    padding: 40px 20px;
+
+    @media (max-width: 1250px) {
+        width: 100%;
+    }
+}
