@@ -9,6 +9,7 @@ const createAsyncSlice = buildCreateSlice({ creators: { asyncThunk: asyncThunkCr
 const initialState = {
     getUsers: { isLoading: false, error: null },
     postUser: { isLoading: false, error: null },
+	deleteUser: { isLoading: false, error: null },
     users: [],
     usersInLocalStorage: JSON.parse(localStorage.getItem(USER_PATH) || '[]'),
     usersInSessionStorage: JSON.parse(sessionStorage.getItem(USER_PATH) || '[]')
@@ -26,60 +27,71 @@ export const appSlice = createAsyncSlice({
             usersInSession: sliceState.usersInSessionStorage
         }),
         selectAppPostUser: sliceState => sliceState.postUser,
+	    selectAppDeleteUser: sliceState => sliceState.deleteUser,
         selectAppUsersInLS: sliceState => sliceState.usersInLocalStorage,
         selectAppUsersInSS: sliceState => sliceState.usersInSessionStorage,
     },
     reducers: create => ({
-        setAppUsersAsync: create.asyncThunk(
+        setAppGetUsersAsync: create.asyncThunk(
             AppController.getUsers,
             AppRequestHandler.getUsers
         ),
-        setAppUserAsync: create.asyncThunk(
+	    setAppGetUsersZeroingError: create.reducer((state, action) => {
+			state.getUsers.error = null
+	    }),
+        setAppPostUserAsync: create.asyncThunk(
             AppController.postUser,
             AppRequestHandler.postUser
         ),
+	    setAppPostUserZeroingError: create.reducer((state, action) => {
+		    state.postUser.error = null
+	    }),
+	    setAppDeleteUserAsync: create.asyncThunk(
+		    AppController.deleteUser,
+		    AppRequestHandler.deleteUser
+	    ),
+	    setAppDeleteUserZeroingError: create.reducer((state, action) => {
+		    state.deleteUser.error = null
+	    }),
+	    setAppZeroingStorage: create.reducer((state, action) => {
+			const storage = action.payload === LOCAL_STORAGE ? localStorage : sessionStorage
+		    const currentStorageKey = `usersIn${ action.payload }`
+
+		    storage.removeItem(USER_PATH)
+		    state[currentStorageKey] = []
+	    }),
         setAppUsersToStorage: create.reducer((state, action) => {
             const { user, actionValue, storage } = action.payload
 
-            const currentStorage = `usersIn${ storage }Storage`
+            const currentStorageKey = `usersIn${ storage }`
 
             const usersArr = actionValue === APP_USER_ADD ?
-                state[currentStorage] = [...state[currentStorage], user]
+                state[currentStorageKey] = [...state[currentStorageKey], user]
                 :
-                state[currentStorage] = state[currentStorage].filter(customer => customer.id !== user.id)
+                state[currentStorageKey] = state[currentStorageKey].filter(customer => customer.id !== user.id)
 
             const truthStorage = storage === LOCAL_STORAGE ? localStorage : sessionStorage
 
             truthStorage.setItem(USER_PATH, JSON.stringify(usersArr))
         }),
-        setDeleteUserEverywhere: create.reducer((state, action) => {
-            state.users = state.users.filter(user => user.id !== action.payload)
-
-            const inLocal = state.usersInLocalStorage.some(user => user.id === action.payload)
-            const inSession = state.usersInSessionStorage.some(user => user.id === action.payload)
-
-            if (inLocal) {
-                state.usersInLocalStorage = state.usersInLocalStorage.filter(user => user.id !== action.payload)
-                localStorage.setItem(USER_PATH, JSON.stringify(state.usersInLocalStorage))
-            }
-            if (inSession) {
-                state.usersInSessionStorage = state.usersInSessionStorage.filter(user => user.id !== action.payload)
-                sessionStorage.setItem(USER_PATH, JSON.stringify(state.usersInLocalStorage))
-            }
-        })
     })
 })
 
 export const {
     selectAppGetUsers,
     selectAppPostUser,
+	selectAppDeleteUser,
     selectAppUsersInLS,
     selectAppUsersInSS
 } = appSlice.selectors
 
 export const {
-    setAppUsersAsync,
-    setAppUserAsync,
+	setAppGetUsersAsync,
+	setAppGetUsersZeroingError,
+    setAppPostUserAsync,
+	setAppPostUserZeroingError,
+	setAppZeroingStorage,
+	setAppDeleteUserAsync,
+	setAppDeleteUserZeroingError,
     setAppUsersToStorage,
-    setDeleteUserEverywhere
 } = appSlice.actions

@@ -10,7 +10,7 @@ export class AppRequestHandler {
             state.users = action.payload
         },
         rejected: (state, action) => {
-            state.getUsers.error = action.payload.message
+	        state.getUsers.error = action.payload.message
         },
         settled: (state, action) => {
             state.getUsers.isLoading = false
@@ -45,4 +45,31 @@ export class AppRequestHandler {
             state.postUser.isLoading = false
         }
     }
+
+	static deleteUser = {
+		pending: (state, action) => {
+			state.deleteUser.isLoading = true
+		},
+		fulfilled: (state, action) => {
+			state.users = state.users.filter(user => user.id !== action.payload)
+
+			const inLocal = state.usersInLocalStorage.some(user => user.id === action.payload)
+			const inSession = state.usersInSessionStorage.some(user => user.id === action.payload)
+
+			if (inLocal) {
+				state.usersInLocalStorage = state.usersInLocalStorage.filter(user => user.id !== action.payload)
+				localStorage.setItem(USER_PATH, JSON.stringify(state.usersInLocalStorage))
+			}
+			if (inSession) {
+				state.usersInSessionStorage = state.usersInSessionStorage.filter(user => user.id !== action.payload)
+				sessionStorage.setItem(USER_PATH, JSON.stringify(state.usersInLocalStorage))
+			}
+		},
+		rejected: (state, action) => {
+			state.deleteUser.error = action.payload.message
+		},
+		settled: (state, action) => {
+			state.deleteUser.isLoading = false
+		}
+	}
 }

@@ -2,28 +2,37 @@
 import { useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {
-    selectAppGetUsers,
-    setAppUsersAsync,
-    setAppUsersToStorage,
-    setDeleteUserEverywhere
+	selectAppDeleteUser,
+	selectAppGetUsers, setAppDeleteUserAsync, setAppDeleteUserZeroingError,
+	setAppGetUsersAsync, setAppGetUsersZeroingError,
+	setAppUsersToStorage
 } from '@/redux/slices/appSlice'
 import MainUser from '@/components/users/main-user/MainUser'
 import Loader from '@/components/loader/Loader'
+import Error from '@/components/error/Error'
 
 const Main = () => {
     const dispatch = useDispatch()
 
     const {
-        isLoading,
-        error,
+        isLoading: isGetUsersLoading,
+        error: getUsersError,
         users,
         usersInLocal,
         usersInSession
     } = useSelector(selectAppGetUsers)
 
+	const {
+		isLoading: isDeleteUserLoading,
+		error: deleteUserError
+	} = useSelector(selectAppDeleteUser)
+
     // data === { user, actionValue, storage }
     const setToStorage = useCallback(data => dispatch(setAppUsersToStorage(data)), [])
-    const deleteUser = useCallback(id => dispatch(setDeleteUserEverywhere(id)), [])
+    const deleteUser = useCallback(id => dispatch(setAppDeleteUserAsync(id)), [])
+
+	const zeroingGetUsersError = () => dispatch(setAppGetUsersZeroingError())
+	const zeroingPostUserError = () => dispatch(setAppDeleteUserZeroingError())
 
     return (
         <section className={ 'main page' }>
@@ -32,7 +41,7 @@ const Main = () => {
             </h1>
             <button
                 className={ 'main__button button' }
-                onClick={ () => dispatch(setAppUsersAsync()) }
+                onClick={ () => dispatch(setAppGetUsersAsync()) }
             >GET USERS
             </button>
             {
@@ -54,8 +63,19 @@ const Main = () => {
                         }) }
                     </ul> : ''
             }
-            { error && <div>{ error }</div> } {/* todo: Сделать нормальную обработку ошибок */ }
-            { isLoading && <Loader/> }
+            {
+				(getUsersError || deleteUserError)
+	            &&
+	            <Error
+		            error={ getUsersError || deleteUserError }
+		            callback={ getUsersError ? zeroingGetUsersError : zeroingPostUserError }
+	            />
+			}
+            {
+				(isDeleteUserLoading || isGetUsersLoading)
+	            &&
+	            <Loader />
+			}
         </section>
     )
 }

@@ -4,27 +4,28 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { AppValidator } from '@/js/validators/AppValidator'
-import { selectAppPostUser, setAppUserAsync } from '@/redux/slices/appSlice'
+import { selectAppPostUser, setAppPostUserAsync, setAppPostUserZeroingError } from '@/redux/slices/appSlice'
 import AddUserInput from '@/components/add-user/AddUserInput'
 import Loader from '@/components/loader/Loader'
+import Error from '@/components/error/Error'
 import {
-    ADD_USER_FORM_BS,
-    ADD_USER_FORM_CATCH_PHRASE,
-    ADD_USER_FORM_CITY,
-    ADD_USER_FORM_COMPANY_NAME,
-    ADD_USER_FORM_EMAIL,
-    ADD_USER_FORM_LAT,
-    ADD_USER_FORM_LEGENDS,
-    ADD_USER_FORM_LNG,
-    ADD_USER_FORM_NAME,
-    ADD_USER_FORM_STREET,
-    ADD_USER_FORM_SUITE,
-    ADD_USER_FORM_PHONE,
-    ADD_USER_FORM_USERNAME,
-    ADD_USER_FORM_WEBSITE,
-    ADD_USER_FORM_ZIPCODE,
-    ADD_USER_FORM_LOCAL_STORAGE,
-    ADD_USER_FORM_SESSION_STORAGE
+	ADD_USER_FORM_BS,
+	ADD_USER_FORM_CATCH_PHRASE,
+	ADD_USER_FORM_CITY,
+	ADD_USER_FORM_COMPANY_NAME,
+	ADD_USER_FORM_EMAIL,
+	ADD_USER_FORM_LAT,
+	ADD_USER_FORM_LEGENDS,
+	ADD_USER_FORM_LNG,
+	ADD_USER_FORM_NAME,
+	ADD_USER_FORM_STREET,
+	ADD_USER_FORM_SUITE,
+	ADD_USER_FORM_PHONE,
+	ADD_USER_FORM_USERNAME,
+	ADD_USER_FORM_WEBSITE,
+	ADD_USER_FORM_ZIPCODE,
+	ADD_USER_FORM_LOCAL_STORAGE,
+	ADD_USER_FORM_SESSION_STORAGE
 } from '@/js/constants/addUserForm'
 
 const AddUser = () => {
@@ -68,12 +69,14 @@ const AddUser = () => {
 
     const { isLoading, error } = useSelector(selectAppPostUser)
 
+	const zeroingError = () => dispatch(setAppPostUserZeroingError())
+
     return (
         <section className={ 'add-user page' }>
             <h1 className={ 'add-user__subject index-subject' }>Создайте нового пользователя</h1>
             <form
                 className={ 'add-user__form' }
-                onSubmit={ handleSubmit(formData => { dispatch(setAppUserAsync(formData)); reset() }) }
+                onSubmit={ handleSubmit(formData => { dispatch(setAppPostUserAsync(formData)); reset() }) }
                 method={ 'post' }
             >
                 { formInputData.map(({ legend, inputChunks }) =>
@@ -102,7 +105,7 @@ const AddUser = () => {
                     <input className={ 'add-user__btn button' } type="submit"/>
                 </div>
             </form>
-            { error && <div>{ error }</div> } {/* todo: Сделать нормальную обработку ошибок */ }
+            { error && <Error error={ error } callback={ zeroingError } /> }
             { isLoading && <Loader/> }
         </section>
     )

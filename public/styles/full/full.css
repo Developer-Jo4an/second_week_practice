@@ -206,51 +206,6 @@ template {
   color: #ffffff;
 }
 
-.loader {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.3);
-}
-
-.loader__spinner {
-  width: 64px;
-  height: 64px;
-  position: relative;
-  animation: rotate 1.5s ease-in infinite alternate;
-}
-.loader__spinner::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  color: coral;
-  background: currentColor;
-  width: 64px;
-  height: 32px;
-  border-radius: 0 0 50px 50px;
-}
-.loader__spinner::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: 10%;
-  background: #ffffff;
-  width: 8px;
-  height: 64px;
-  animation: rotate 1.2s linear infinite alternate-reverse;
-}
-
-@keyframes rotate {
-  100% {
-    transform: rotate(360deg);
-  }
-}
 .index-subject {
   font-size: 32px;
 }
@@ -290,6 +245,86 @@ template {
 }
 .header__nav-link:hover {
   opacity: 0.7;
+}
+
+.loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.loader__spinner {
+  width: 64px;
+  height: 64px;
+  position: relative;
+  animation: rotate 1.5s ease-in infinite alternate;
+}
+.loader__spinner::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  color: coral;
+  background: currentColor;
+  width: 64px;
+  height: 32px;
+  border-radius: 0 0 50px 50px;
+}
+.loader__spinner::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 10%;
+  background: #ffffff;
+  width: 8px;
+  height: 64px;
+  animation: rotate 1.2s linear infinite alternate-reverse;
+}
+
+@keyframes rotate {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.error {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.error__info {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+  border-radius: 20px;
+  background-color: #ffffff;
+}
+
+.error__subject {
+  font-weight: 600;
+  font-size: 24px;
+}
+
+.error__description {
+  font-size: 18px;
+}
+
+.error__btns {
+  display: flex;
+  justify-content: flex-end;
 }
 
 .main__subject {
@@ -379,6 +414,11 @@ template {
 
 .storage__subject {
   text-align: center;
+}
+
+.storage__button {
+  align-self: center;
+  margin-top: 20px;
 }
 
 .storage__none-users-message {

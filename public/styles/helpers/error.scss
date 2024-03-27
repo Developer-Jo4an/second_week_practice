@@ -1,0 +1,40 @@
+.error {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-color: rgba(#000000, 0.3);
+}
+
+.error__info {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    padding: 20px;
+
+    border-radius: 20px;
+
+    background-color: #ffffff;
+}
+
+.error__subject {
+    font-weight: 600;
+
+    font-size: 24px;
+}
+
+.error__description {
+    font-size: 18px;
+}
+
+.error__btns {
+    display: flex;
+    justify-content: flex-end;
+}
