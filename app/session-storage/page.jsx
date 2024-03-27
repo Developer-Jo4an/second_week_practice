@@ -2,7 +2,7 @@
 import { useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { selectAppUsersInSS, setAppUsersToStorage } from '@/redux/slices/appSlice'
-import { APP_USER_REM, SESSION_STORAGE } from '@/js/constants/appSliceConst'
+import { APP_USER_REM, SESSION_STORAGE } from '@/js/constants/appSliceActStor'
 import StorageUser from '@/components/users/Storage-user/StorageUser'
 
 const Session = () => {

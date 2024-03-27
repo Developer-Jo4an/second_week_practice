@@ -13,14 +13,10 @@
     background-color: rgba(gray, 0.1);
 
     border: 4px solid coral;
-
-    & fieldset:last-child {
-        border: 0;
-    }
 }
 
-// chunk
-.add-user__form-chunk {
+// fieldset
+.add-user__fieldset {
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -30,7 +26,7 @@
     border-bottom: 4px solid coral;
 }
 
-.add-user__form-chunk-subject {
+.add-user__legend {
     font-size: 24px;
 
     font-weight: 600;
@@ -38,27 +34,50 @@
     padding: 20px 0 0 40px;
 }
 
-.add-user__form-chunks-wrapper {
+.add-user__form-container {
     display: flex;
+
+    gap: 20px;
 }
 
-.add-user__form-chunk-content {
+.add-user__wrapper {
     flex: 1;
     display: flex;
     flex-direction: column;
     gap: 20px;
 }
 
-.add-user__form-label {
+.add-user__sub-wrapper {
     align-self: flex-start;
     display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.add-user__entry {
+    display: flex;
+    flex-direction: column;
+    gap: 10px
+}
+
+// label
+.add-user__label {
+    display: flex;
+    justify-content: space-between;
     align-items: center;
     gap: 10px;
 
     font-weight: 600;
 }
 
-.add-user__form-input {
+// custom labels
+.label_checkbox {
+    & > :nth-child(1) { order: 2 }
+    & > :nth-child(2) { order: 1 }
+}
+
+// input
+.add-user__input {
     width: 240px;
 
     padding: 10px 20px;
@@ -75,7 +94,19 @@
     }
 }
 
-.add-user__form-buttons {
+// custom inputs
+.input_checkbox { width: auto }
+
+.add-user__catch {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+
+    font-size: 12px;
+    color: red;
+}
+
+.add-user__buttons {
     padding: 20px;
 
     display: flex;

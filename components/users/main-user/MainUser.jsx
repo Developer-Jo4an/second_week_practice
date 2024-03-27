@@ -1,8 +1,8 @@
 import { FaUserSecret } from 'react-icons/fa'
 import { memo } from 'react'
-import { APP_USER_ADD, APP_USER_REM, LOCAL_STORAGE, SESSION_STORAGE } from '@/js/constants/appSliceConst'
+import { APP_USER_ADD, APP_USER_REM, LOCAL_STORAGE, SESSION_STORAGE } from '@/js/constants/appSliceActStor'
 
-const MainUser = memo(({ user, inLocal, inSession, setToStorage }) => {
+const MainUser = memo(({ user, inLocal, inSession, setToStorage, deleteUser }) => {
     const persDataChunk = {
         username: user.username,
         name: user.name,
@@ -42,6 +42,11 @@ const MainUser = memo(({ user, inLocal, inSession, setToStorage }) => {
             <div className={ 'main-user-card__buttons' }>
                 { buttonCreator(LOCAL_STORAGE) }
                 { buttonCreator(SESSION_STORAGE) }
+                <button
+                    className={ 'main-user-card__button button' }
+                    onClick={ () => deleteUser(user.id) }
+                >Delete from everywhere
+                </button>
             </div>
         </div>
     )

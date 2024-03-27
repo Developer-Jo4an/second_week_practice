@@ -1,45 +1,42 @@
 import { asyncThunkCreator, buildCreateSlice } from '@reduxjs/toolkit'
 import { AppController } from '@/js/controllers/AppController'
 import { AppRequestHandler } from '@/js/requestHandlers/AppRequestHandler'
-import { APP_USER_ADD, LOCAL_STORAGE } from '@/js/constants/appSliceConst'
+import { APP_USER_ADD, LOCAL_STORAGE } from '@/js/constants/appSliceActStor'
+import { USER_PATH } from '@/js/constants/serverUrl'
 
 const createAsyncSlice = buildCreateSlice({ creators: { asyncThunk: asyncThunkCreator } })
 
 const initialState = {
-    isLoading: false,
-    error: null,
+    getUsers: { isLoading: false, error: null },
+    postUser: { isLoading: false, error: null },
     users: [],
-    usersInLocalStorage: JSON.parse(localStorage.getItem('users') || '[]'),
-    usersInSessionStorage: JSON.parse(sessionStorage.getItem('users') || '[]')
+    usersInLocalStorage: JSON.parse(localStorage.getItem(USER_PATH) || '[]'),
+    usersInSessionStorage: JSON.parse(sessionStorage.getItem(USER_PATH) || '[]')
 }
-
 
 export const appSlice = createAsyncSlice({
     name: 'appSlice',
     initialState,
     selectors: {
-        selectAppFull: sliceState => sliceState,
-        selectAppRequest: sliceState => ({
-            isLoading: sliceState.isLoading,
-            error: sliceState.error,
-            users: sliceState.users
+        selectAppGetUsers: sliceState => ({
+            isLoading: sliceState.getUsers.isLoading,
+            error: sliceState.getUsers.error,
+            users: sliceState.users,
+            usersInLocal: sliceState.usersInLocalStorage,
+            usersInSession: sliceState.usersInSessionStorage
         }),
-        selectAppIsLoading: sliceState => sliceState.isLoading,
-        selectAppError: sliceState => sliceState.error,
-        selectAppUsers: sliceState => sliceState.users,
+        selectAppPostUser: sliceState => sliceState.postUser,
         selectAppUsersInLS: sliceState => sliceState.usersInLocalStorage,
         selectAppUsersInSS: sliceState => sliceState.usersInSessionStorage,
     },
     reducers: create => ({
-        setAppIsLoading: create.reducer((state, action) => {
-            state.isLoading = action.payload
-        }),
-        setAppError: create.reducer((state, action) => {
-            state.error = state.action.payload
-        }),
         setAppUsersAsync: create.asyncThunk(
             AppController.getUsers,
             AppRequestHandler.getUsers
+        ),
+        setAppUserAsync: create.asyncThunk(
+            AppController.postUser,
+            AppRequestHandler.postUser
         ),
         setAppUsersToStorage: create.reducer((state, action) => {
             const { user, actionValue, storage } = action.payload
@@ -51,27 +48,38 @@ export const appSlice = createAsyncSlice({
                 :
                 state[currentStorage] = state[currentStorage].filter(customer => customer.id !== user.id)
 
-            storage === LOCAL_STORAGE ?
-                localStorage.setItem('users', JSON.stringify(usersArr))
-                :
-                sessionStorage.setItem('users', JSON.stringify(usersArr))
+            const truthStorage = storage === LOCAL_STORAGE ? localStorage : sessionStorage
+
+            truthStorage.setItem(USER_PATH, JSON.stringify(usersArr))
         }),
+        setDeleteUserEverywhere: create.reducer((state, action) => {
+            state.users = state.users.filter(user => user.id !== action.payload)
+
+            const inLocal = state.usersInLocalStorage.some(user => user.id === action.payload)
+            const inSession = state.usersInSessionStorage.some(user => user.id === action.payload)
+
+            if (inLocal) {
+                state.usersInLocalStorage = state.usersInLocalStorage.filter(user => user.id !== action.payload)
+                localStorage.setItem(USER_PATH, JSON.stringify(state.usersInLocalStorage))
+            }
+            if (inSession) {
+                state.usersInSessionStorage = state.usersInSessionStorage.filter(user => user.id !== action.payload)
+                sessionStorage.setItem(USER_PATH, JSON.stringify(state.usersInLocalStorage))
+            }
+        })
     })
 })
 
 export const {
-    selectAppFull,
-    selectAppRequest,
-    selectAppIsLoading,
-    selectAppError,
-    selectAppUsers,
+    selectAppGetUsers,
+    selectAppPostUser,
     selectAppUsersInLS,
     selectAppUsersInSS
 } = appSlice.selectors
 
 export const {
-    setAppIsLoading,
-    setAppError,
     setAppUsersAsync,
-    setAppUsersToStorage
+    setAppUserAsync,
+    setAppUsersToStorage,
+    setDeleteUserEverywhere
 } = appSlice.actions

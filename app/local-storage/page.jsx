@@ -2,7 +2,7 @@
 import { useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { selectAppUsersInLS, setAppUsersToStorage } from '@/redux/slices/appSlice'
-import { APP_USER_REM, LOCAL_STORAGE } from '@/js/constants/appSliceConst'
+import { APP_USER_REM, LOCAL_STORAGE } from '@/js/constants/appSliceActStor'
 import StorageUser from '@/components/users/Storage-user/StorageUser'
 
 const Local = () => {

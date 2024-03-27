@@ -1,133 +1,111 @@
 'use client'
-import { useRef } from 'react'
+import { useMemo } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useForm } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { AppValidator } from '@/js/validators/AppValidator'
+import { selectAppPostUser, setAppUserAsync } from '@/redux/slices/appSlice'
+import AddUserInput from '@/components/add-user/AddUserInput'
+import Loader from '@/components/loader/Loader'
+import {
+    ADD_USER_FORM_BS,
+    ADD_USER_FORM_CATCH_PHRASE,
+    ADD_USER_FORM_CITY,
+    ADD_USER_FORM_COMPANY_NAME,
+    ADD_USER_FORM_EMAIL,
+    ADD_USER_FORM_LAT,
+    ADD_USER_FORM_LEGENDS,
+    ADD_USER_FORM_LNG,
+    ADD_USER_FORM_NAME,
+    ADD_USER_FORM_STREET,
+    ADD_USER_FORM_SUITE,
+    ADD_USER_FORM_PHONE,
+    ADD_USER_FORM_USERNAME,
+    ADD_USER_FORM_WEBSITE,
+    ADD_USER_FORM_ZIPCODE,
+    ADD_USER_FORM_LOCAL_STORAGE,
+    ADD_USER_FORM_SESSION_STORAGE
+} from '@/js/constants/addUserForm'
 
 const AddUser = () => {
-	const formRef = useRef()
+    const dispatch = useDispatch()
+    const formInputData = useMemo(() => [
+        {
+            legend: ADD_USER_FORM_LEGENDS.personalData,
+            inputChunks: [
+                [ADD_USER_FORM_NAME, ADD_USER_FORM_USERNAME, ADD_USER_FORM_PHONE], // main inputs
+                [ADD_USER_FORM_EMAIL, ADD_USER_FORM_WEBSITE] // secondary inputs
+            ]
+        },
+        {
+            legend: ADD_USER_FORM_LEGENDS.address,
+            inputChunks: [
+                [ADD_USER_FORM_CITY, ADD_USER_FORM_STREET, ADD_USER_FORM_SUITE],
+                [ADD_USER_FORM_LNG, ADD_USER_FORM_LAT, ADD_USER_FORM_ZIPCODE]
+            ]
+        },
+        {
+            legend: ADD_USER_FORM_LEGENDS.workPlace,
+            inputChunks: [
+                [ADD_USER_FORM_COMPANY_NAME, ADD_USER_FORM_BS],
+                [ADD_USER_FORM_CATCH_PHRASE]
+            ]
+        },
+        {
+            legend: ADD_USER_FORM_LEGENDS.storages,
+            inputChunks: [
+                [ADD_USER_FORM_LOCAL_STORAGE, ADD_USER_FORM_SESSION_STORAGE]
+            ]
+        }
+    ], [])
 
-	const sendForm = async e => {
-		e.preventDefault()
+    const {
+        register,
+        formState: { errors },
+        handleSubmit,
+        reset
+    } = useForm({ resolver: yupResolver(AppValidator.postUserValidation()) })
 
-		const userData = {
-			name: "а Graham",
-		}
+    const { isLoading, error } = useSelector(selectAppPostUser)
 
-		const answer = await fetch('https://jsonplaceholder.typicode.com/users', {
-			method: 'POST',
-			'Content-Type': 'application/json',
-			body: JSON.stringify(userData)
-		})
-
-		const answerJson = await answer.json()
-		console.log(answerJson)
-	}
-
-	return (
-		<section className={ 'add-user page' }>
-			<h1 className={ 'add-user__subject index-subject' }>Создайте нового пользователя</h1>
-			<form className={ 'add-user__form' } method={ 'post' } ref={ formRef }>
-				<fieldset className={ 'add-user__form-chunk' } name={'persData'}>
-					<legend className={ 'add-user__form-chunk-subject' }>Личная информация</legend>
-					<div className={ 'add-user__form-chunks-wrapper' }>
-						<div className={ 'add-user__form-chunk-content' }>
-							<label className={ 'add-user__form-label' } htmlFor='name'>
-								Name:
-								<input className={ 'add-user__form-input' } type='text'
-								       name={ 'name' } id={ 'name' } placeholder={ 'Ivan' } autoFocus />
-							</label>
-							<label className={ 'add-user__form-label' } htmlFor='tel'>
-								Phone:
-								<input className={ 'add-user__form-input' } type='tel'
-								       name={ 'tel' } id={ 'tel' } placeholder={ '+79105674532' } />
-							</label>
-							<label className={ 'add-user__form-label' } htmlFor='username'>
-								Username:
-								<input className={ 'add-user__form-input' } type='text'
-								       name={ 'username' } id={ 'username' } placeholder={ 'super-hero' } />
-							</label>
-						</div>
-						<div className={ 'add-user__form-chunk-content' }>
-							<label className={ 'add-user__form-label' } htmlFor='email'>
-								Email:
-								<input className={ 'add-user__form-input' } type='email'
-								       name={ 'email' } id={ 'email' } placeholder={ 'email@mail.ru' } />
-							</label>
-							<label className={ 'add-user__form-label' } htmlFor='website'>
-								Website:
-								<input className={ 'add-user__form-input' } type='text'
-								       name={ 'website' } id={ 'website' } placeholder={ 'website.ru' } />
-							</label>
-						</div>
-					</div>
-				</fieldset>
-				<fieldset className={ 'add-user__form-chunk' }  name={'address'}>
-					<legend className={ 'add-user__form-chunk-subject' }>Адрес</legend>
-					<div className={ 'add-user__form-chunks-wrapper' }>
-						<div className={ 'add-user__form-chunk-content' }>
-							<label className={ 'add-user__form-label' } htmlFor='city'>
-								City:
-								<input className={ 'add-user__form-input' } type='text'
-								       name={ 'city' } id={ 'city' } placeholder={ 'New York' } />
-							</label>
-							<label className={ 'add-user__form-label' } htmlFor='street'>
-								Street:
-								<input className={ 'add-user__form-input' } type='text'
-								       name={ 'street' } id={ 'street' } placeholder={ 'Robert street 42' } />
-							</label>
-							<label className={ 'add-user__form-label' } htmlFor='suite'>
-								Suite:
-								<input className={ 'add-user__form-input' } type='text'
-								       name={ 'suite' } id={ 'suite' } placeholder={ '42' } />
-							</label>
-						</div>
-						<div className={ 'add-user__form-chunk-content' }>
-							<label className={ 'add-user__form-label' } htmlFor='geo'>
-								Geo:
-								<input className={ 'add-user__form-input' } type='text'
-								       name={ 'geo' } id={ 'geo' } placeholder={ 'lat: -10, lng: 5' } />
-							</label>
-							<label className={ 'add-user__form-label' } htmlFor='zipCode'>
-								Zipcode:
-								<input className={ 'add-user__form-input' } type='text'
-								       name={ 'zipCode' } id={ 'zipCode' } placeholder={ '42424-4242' } />
-							</label>
-						</div>
-					</div>
-				</fieldset>
-				<fieldset className={ 'add-user__form-chunk' } name={'company'}>
-					<legend className={ 'add-user__form-chunk-subject' }>Место работы</legend>
-					<div className={ 'add-user__form-chunks-wrapper' }>
-						<div className={ 'add-user__form-chunk-content' }>
-							<label className={ 'add-user__form-label' } htmlFor='companyName'>
-								Company name:
-								<input className={ 'add-user__form-input' } type='text'
-								       name={ 'companyName' } id={ 'companyName' } placeholder={ 'Google' } />
-							</label>
-							<label className={ 'add-user__form-label' } htmlFor='bs'>
-								Bs:
-								<input className={ 'add-user__form-input' } type='text'
-								       name={ 'bs' } id={ 'bs' } placeholder={ 'real-time e-markets' } />
-							</label>
-						</div>
-						<div className={ 'add-user__form-chunk-content' }>
-							<label className={ 'add-user__form-label' } htmlFor='catchPhrase'>
-								Catch phrase:
-								<input className={ 'add-user__form-input' } type='text'
-								       name={ 'catchPhrase' } id={ 'catchPhrase' } placeholder={ 'neural-net' } />
-							</label>
-						</div>
-					</div>
-				</fieldset>
-				<div className={ 'add-user__form-buttons' }>
-					<input className={ 'add-user__form-btn button' } type='reset' />
-					<input
-						className={ 'add-user__form-btn button' }
-						type='submit'
-						onClick={ sendForm }
-					/>
-				</div>
-			</form>
-		</section>
-	)
+    return (
+        <section className={ 'add-user page' }>
+            <h1 className={ 'add-user__subject index-subject' }>Создайте нового пользователя</h1>
+            <form
+                className={ 'add-user__form' }
+                onSubmit={ handleSubmit(formData => { dispatch(setAppUserAsync(formData)); reset() }) }
+                method={ 'post' }
+            >
+                { formInputData.map(({ legend, inputChunks }) =>
+                    <fieldset key={ legend } className={ 'add-user__fieldset' }>
+                        <legend className={ 'add-user__legend' }>{ legend }</legend>
+                        <div className={ 'add-user__form-container' }>
+                            { inputChunks.map((chunk, key) =>
+                                <div className={ 'add-user__wrapper' } key={ key }>
+                                    <div className={ 'add-user__sub-wrapper' }>
+                                        { chunk.map(input =>
+                                            <AddUserInput
+                                                key={ input.id }
+                                                input={ input }
+                                                register={ register }
+                                                error={ errors?.[input.key] && errors[input.key].message }
+                                            />
+                                        ) }
+                                    </div>
+                                </div>
+                            ) }
+                        </div>
+                    </fieldset>
+                ) }
+                <div className={ 'add-user__buttons' }>
+                    <input className={ 'add-user__btn button' } type="reset"/>
+                    <input className={ 'add-user__btn button' } type="submit"/>
+                </div>
+            </form>
+            { error && <div>{ error }</div> } {/* todo: Сделать нормальную обработку ошибок */ }
+            { isLoading && <Loader/> }
+        </section>
+    )
 }
 
 export default AddUser
