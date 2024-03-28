@@ -44,35 +44,32 @@ const Main = () => {
                 onClick={ () => dispatch(setAppGetUsersAsync()) }
             >GET USERS
             </button>
-            {
-                users.length ?
-                    <ul className={ 'main__user-list' }>
-                        { users.map(user => {
-                            const inLocal = usersInLocal.some(customer => user.id === customer.id)
-                            const inSession = usersInSession.some(customer => user.id === customer.id)
+            { users.length ?
+                <ul className={ 'main__user-list' }>
+                    { users.map(user => {
+                        const inLocal = usersInLocal.some(customer => user.id === customer.id)
+                        const inSession = usersInSession.some(customer => user.id === customer.id)
 
-                            return <li className={ 'main__user-item' } key={ user.id }>
-                                <MainUser
-                                    user={ user }
-                                    inLocal={ inLocal }
-                                    inSession={ inSession }
-                                    setToStorage={ setToStorage }
-                                    deleteUser={ deleteUser }
-                                />
-                            </li>
-                        }) }
-                    </ul> : ''
-            }
-            {
-				(getUsersError || deleteUserError)
+                        return <li className={ 'main__user-item' } key={ user.id }>
+                            <MainUser
+                                user={ user }
+                                inLocal={ inLocal }
+                                inSession={ inSession }
+                                setToStorage={ setToStorage }
+                                deleteUser={ deleteUser }
+                            />
+                        </li>
+                    }) }
+                </ul> : ''
+			}
+            { (getUsersError || deleteUserError)
 	            &&
 	            <Error
 		            error={ getUsersError || deleteUserError }
 		            callback={ getUsersError ? zeroingGetUsersError : zeroingPostUserError }
 	            />
 			}
-            {
-				(isDeleteUserLoading || isGetUsersLoading)
+            { (isDeleteUserLoading || isGetUsersLoading)
 	            &&
 	            <Loader />
 			}

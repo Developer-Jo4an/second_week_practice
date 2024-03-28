@@ -7,6 +7,7 @@ const Header = () => {
 		{ href: '/local-storage', label: 'Local storage' },
 		{ href: '/session-storage', label: 'Session storage' },
 		{ href: '/add-user', label: 'Add user' },
+		{ href: '/game', label: 'Game' }
 	]
 
 	return (
