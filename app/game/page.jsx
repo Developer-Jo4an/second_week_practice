@@ -1,6 +1,5 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
-import { Application } from 'pixi.js'
 import Loader from '@/components/loader/Loader'
 
 const Game = () => {
@@ -9,20 +8,19 @@ const Game = () => {
 	const gameContainerRef = useRef()
 
 	useEffect(() => {
-		const startGame = async () => {
+		(async () => {
 			const { Application } = await import('pixi.js')
 			const { default: GameController } = await import('@/game/GameController')
 
 			setLoading(false)
 
 			const controller = new GameController(new Application(), gameContainerRef.current)
-			controller.activateGame()
-		}
-		startGame()
+			await controller.activateGame()
+		})()
 	}, [])
 
 	return (
-		<section className={ 'game page' }>
+		<section className={ 'game' }>
 			<div className={ 'game__container' } ref={ gameContainerRef }></div>
 			{ isLoading && <Loader /> }
 		</section>

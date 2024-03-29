@@ -12,15 +12,3 @@
         width: 100%;
     }
 }
-
-.game__container {
-    width: 800px;
-    height: 600px;
-
-    @media (max-width: 800px) {
-        width: 100%;
-    }
-    @media (max-height: 600px) {
-        height: 100%;
-    }
-}
