@@ -1,0 +1,25 @@
+.header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  background-color: coral;
+}
+
+.header__nav-list {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.header__nav-link {
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 24px;
+  transition: 0.3s;
+}
+.header__nav-link:hover {
+  opacity: 0.7;
+}
+
+/*# sourceMappingURL=header.css.map */

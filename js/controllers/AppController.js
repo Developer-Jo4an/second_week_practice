@@ -28,7 +28,9 @@ export class AppController {
 
 			const user = await fetch(SERVER_URL, {
 				method: 'POST',
-				'Content-Type': 'application/json',
+				headers: {
+					'Content-Type': 'application/json'
+				},
 				body: JSON.stringify(newUser)
 			})
 
@@ -50,7 +52,9 @@ export class AppController {
 		try {
 			if (!userId) throw AppErrorService.deleteUserError(400)
 
-			const answer = await fetch(`${ SERVER_URL }/${ userId }`, { method: 'DELETE' })
+			const answer = await fetch(`${ SERVER_URL }/${ userId }`, {
+				method: 'DELETE'
+			})
 
 			const { id } = await answer.json()
 
