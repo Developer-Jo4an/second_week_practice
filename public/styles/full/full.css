@@ -338,10 +338,6 @@ template {
   margin-bottom: 20px;
 }
 
-header {
-  display: none !important;
-}
-
 .main__button {
   align-self: center;
   margin-bottom: 40px;

@@ -1,11 +1,7 @@
 import { Button } from '@/game/Button'
-import { EventEmitter } from 'pixi.js'
 import GameController from '@/game/GameController'
 
 export class StartBtn extends Button {
-	BUTTON_POINTER_UP = 'startBtnPointerUp'
-	BUTTON_EVENT_EMITTER = new EventEmitter()
-
 	constructor(texture) {
 		super(texture)
 		this.height = GameController.DS.height * 0.2
@@ -18,13 +14,12 @@ export class StartBtn extends Button {
 		this.activateCustomEvents()
 	}
 
-
 	startPointerDown() {
 		this.pointerUp(() => {
-			this.BUTTON_EVENT_EMITTER.emit(this.BUTTON_POINTER_UP)
+			this.destroy()
+			GameController.GAME_EMITTER.emit(GameController.START_GAME)
 		})
 	}
-
 
 	activateCustomEvents() {
 		this.on('pointerup', this.startPointerDown)

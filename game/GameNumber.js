@@ -11,6 +11,5 @@ export class GameNumber extends Sprite {
 			GameController.DS.width * 0.5,
 			GameController.DS.height * 0.5
 		)
-		this.visible = false
 	}
 }
