@@ -1,10 +1,12 @@
-import { Assets, EventEmitter, Graphics } from 'pixi.js'
+import { Assets, EventEmitter, Graphics, Texture } from 'pixi.js'
 import { gsap } from 'gsap'
 import { Character } from '@/game/Character'
 import { StartBtn } from '@/game/StartBtn'
 import { GameNumber } from '@/game/GameNumber'
 import { Background } from '@/game/Background'
 import { Barrier } from '@/game/Barrier'
+import { Score } from '@/game/Score'
+import { ScoreLine } from '@/game/ScoreLine'
 
 import backgroundImage from '@/game/game-assets/background.png'
 import characterImage from '@/game/game-assets/character.png'
@@ -14,14 +16,22 @@ import timerTwoImage from '@/game/game-assets/timer-two.png'
 import timerThreeImage from '@/game/game-assets/timer-three.png'
 import barrierImage from '@/game/game-assets/barrier.png'
 
+gsap.ticker.fps(60)
+
 export default class GameController {
     static DS = { height: 550, width: 1000 }
+
     static GAME_EMITTER = new EventEmitter()
-    static START_GAME = 'startGame'
-    static RESTART_GAME = 'restartGame'
+
+    static START_GAME = 'START_GAME'
+    static RESTART_GAME = 'RESTART_GAME'
+
     static DISPATCH_BARRIERS = 'DISPATCH_BARRIERS'
     static CREATE_BARRIERS = 'CREATE_BARRIERS'
     static DELETE_BARRIERS = 'DELETE_BARRIERS'
+
+	static ADD_POINT = 'ADD_POINT'
+	static DELETE_SCORE = 'DELETE_SCORE'
 
     constructor(app, container) {
         if (!GameController.instance) GameController.instance = true
@@ -29,13 +39,18 @@ export default class GameController {
         this.resizeToWindow = this.resizeToWindow.bind(this)
         this.startGame = this.startGame.bind(this)
         this.restartGame = this.restartGame.bind(this)
-        this.dispatchBarriers = this.dispatchBarriers.bind(this)
+        this.barriersReducer = this.barriersReducer.bind(this)
+	    this.scoreReducer = this.scoreReducer.bind(this)
 
         this.app = app
         this.$container = container
+
         this.character = null
+	    this.score = null
         this.spawnInterval = null
+
         this.barriersArray = []
+	    this.scoreLinesArray = []
     }
 
     async activateGame() {
@@ -76,6 +91,7 @@ export default class GameController {
                     onComplete: () => {
                         this.character.characterMove()
                         this.createBarriers()
+	                    this.createScore()
                     }
                 })
 
@@ -92,10 +108,20 @@ export default class GameController {
         }, 1000)
     }
 
-    restartGame() {
-        this.character.characterRemove()
+	saveRecord() {
+		const currentRecord = window.localStorage.getItem('game-record')
 
-        this.dispatchBarriers({
+		if (!currentRecord || +this.score.text > +currentRecord)
+			window.localStorage.setItem('game-record', this.score.text)
+	}
+
+    restartGame() {
+		this.saveRecord()
+
+        this.character.characterRemove()
+		this.scoreReducer({ type: GameController.DELETE_SCORE })
+
+        this.barriersReducer({
             type: GameController.DELETE_BARRIERS,
             barriersArr: this.barriersArray
         })
@@ -135,30 +161,78 @@ export default class GameController {
                 between: whoShift === 'top' ? betweenMultiple : 0
             })
 
-            this.dispatchBarriers({ type: GameController.CREATE_BARRIERS, barriersArr: [barrierTop, barrierBottom] })
+	        const scoreLine = new ScoreLine(
+				Texture.EMPTY,
+		        this.character,
+		        barrierBottom.x
+	        )
+	        scoreLine.scoreLineMove()
+	        this.scoreLinesArray.push(scoreLine)
+
+            this.barriersReducer({
+	            type: GameController.CREATE_BARRIERS,
+	            barriersArr: [barrierTop, barrierBottom]
+			})
         }
 
         this.spawnInterval = setInterval(spawnBarriers, 3000)
     }
 
-    dispatchBarriers({ type, barriersArr }) {
+	barriersReducer({ type, barriersArr }) {
         const barrierLogic = {
             [GameController.CREATE_BARRIERS]: () =>
                 barriersArr.forEach(barrier => {
                     this.app.stage.addChild(barrier)
+
                     this.barriersArray.push(barrier)
+
                     barrier.barrierMove()
                 }),
             [GameController.DELETE_BARRIERS]: () =>
                 this.barriersArray = this.barriersArray.filter(barrier => {
                     if (!barriersArr.includes(barrier)) return true
+
                     barrier.barrierRemove()
                     barrier.destroy()
+
                     return false
                 })
         }
         barrierLogic[type]()
     }
+
+	scoreReducer({ type, scoreLine }) {
+		const scoreLogic = {
+			[GameController.ADD_POINT]: () => {
+				this.score.text = +this.score.text + 1
+
+				scoreLine.scoreLineRemove()
+				scoreLine.destroy()
+
+				this.scoreLinesArray = this.scoreLinesArray.filter(prevScoreLine => prevScoreLine !== scoreLine)
+			},
+			[GameController.DELETE_SCORE]: () => {
+				this.scoreLinesArray = this.scoreLinesArray.filter(scoreLine => {
+					scoreLine.scoreLineRemove()
+					scoreLine.destroy()
+					return false
+				})
+
+				this.score.destroy()
+				this.score = null
+			}
+		}
+		scoreLogic[type]()
+	}
+
+	createScore() {
+		const score = new Score('0', {
+			fontFamily: 'Arial',
+			fontSize: 80,
+			fill: 0xffffff
+		})
+		this.app.stage.addChild(this.score = score)
+	}
 
     async createBackground() {
         const backgroundTexture = await Assets.load(backgroundImage)
@@ -204,6 +278,7 @@ export default class GameController {
 
         GameController.GAME_EMITTER.on(GameController.START_GAME, this.startGame)
         GameController.GAME_EMITTER.on(GameController.RESTART_GAME, this.restartGame)
-        GameController.GAME_EMITTER.on(GameController.DISPATCH_BARRIERS, this.dispatchBarriers)
+        GameController.GAME_EMITTER.on(GameController.DISPATCH_BARRIERS, this.barriersReducer)
+        GameController.GAME_EMITTER.on(GameController.ADD_POINT, this.scoreReducer)
     }
 }

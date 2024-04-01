@@ -3,7 +3,6 @@ import { gsap } from 'gsap'
 import GameController from '@/game/GameController'
 
 export class Character extends Sprite {
-	SPEED = 1
 	SPEED_MULTIPLE = 0.0008
 	ROTATION_MULTIPLE = 0.05
 
@@ -12,9 +11,11 @@ export class Character extends Sprite {
 		this.characterBounce = this.characterBounce.bind(this)
 		this.moveAnimation = this.moveAnimation.bind(this)
 
+		this.speed = 1
 		this.height = GameController.DS.width * 0.05
 		this.width = GameController.DS.width * 0.05
 		this.anchor.set(0.5)
+		this.zIndex = 2
 		this.position.set(
 			GameController.DS.width * 0.3,
 			GameController.DS.height * 0.5,
@@ -34,7 +35,7 @@ export class Character extends Sprite {
 			duration: 0.4,
 			y: this.y - GameController.DS.height * 0.15,
 			ease: 'power2.out',
-			onComplete: () => this.SPEED = 1
+			onComplete: () => this.speed = 1
 		})
 		gsap.to(this, {
 			duration: 0.3,
@@ -51,8 +52,8 @@ export class Character extends Sprite {
 		const toRotation = this.rotation + this.ROTATION_MULTIPLE
 		this.rotation = toRotation <= 1.1 ? toRotation : 1.1
 
-		this.SPEED += this.SPEED_MULTIPLE
-		this.y = (this.y + GameController.DS.height / 150) * this.SPEED
+		this.speed += this.SPEED_MULTIPLE
+		this.y = (this.y + GameController.DS.height / 150) * this.speed
 	}
 
 	characterMove() {
