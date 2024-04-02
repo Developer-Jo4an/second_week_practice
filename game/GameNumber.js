@@ -4,6 +4,7 @@ import GameController from '@/game/GameController'
 export class GameNumber extends Sprite {
 	constructor(texture) {
 		super(texture)
+
 		this.height = GameController.DS.height * 0.3
 		this.width = this.height / 1.44
 		this.anchor.set(0.5)

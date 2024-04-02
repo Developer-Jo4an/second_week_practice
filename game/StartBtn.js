@@ -4,6 +4,7 @@ import GameController from '@/game/GameController'
 export class StartBtn extends Button {
 	constructor(texture) {
 		super(texture)
+
 		this.height = GameController.DS.height * 0.2
 		this.width = this.height * 2.1
 		this.anchor.set(0.5)
