@@ -48,6 +48,25 @@ const Page = () => {
             start: { x: 0, y: 200 },
             end: { x: 800, y: 0 }
         })
+
+        const createSquare = (x, y, r, w, h) => {
+            context.beginPath()
+
+            context.moveTo(x + r, y)
+            context.lineTo(x + w - r, y)
+            context.arc(x + w - r, y + r, r, -Math.PI / 2, 0)
+            context.lineTo(x + w, y + h - r)
+            context.arc(x + w - r, y + h - r, r,0, Math.PI / 2)
+            context.lineTo(x + r, y + h)
+            context.arc(x + r, y + h - r, r, Math.PI/ 2 , Math.PI)
+            context.lineTo(x, y + r)
+            context.arc(x + r, y + r, r, Math.PI, Math.PI * 1.5)
+
+            context.stroke()
+            context.closePath()
+
+        }; createSquare(100, 100, 120, 300, 400)
+
     }, [])
 
     return (
