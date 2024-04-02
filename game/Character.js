@@ -3,6 +3,8 @@ import { gsap } from 'gsap'
 import GameController from '@/game/GameController'
 
 export class Character extends Sprite {
+	static COLLUSION_MULTIPLE = 0.29
+
 	SPEED_MULTIPLE = 0.0008
 	ROTATION_MULTIPLE = 0.05
 
@@ -15,16 +17,17 @@ export class Character extends Sprite {
 		this.height = GameController.DS.width * 0.05
 		this.width = GameController.DS.width * 0.05
 		this.anchor.set(0.5)
-		this.zIndex = 2
 		this.position.set(
 			GameController.DS.width * 0.3,
 			GameController.DS.height * 0.5,
 		)
+
+		this.zIndex = 2
 	}
 
 	isCollusion() {
-		const maxHeight = this.y + this.height * 0.29
-		const minHeight = this.y - this.height * 0.29
+		const maxHeight = this.y + this.height * Character.COLLUSION_MULTIPLE
+		const minHeight = this.y - this.height * Character.COLLUSION_MULTIPLE
 		return (
 			maxHeight >= GameController.DS.height || minHeight <= 0
 		)

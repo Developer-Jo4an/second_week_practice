@@ -19,7 +19,7 @@ import barrierImage from '@/game/game-assets/barrier.png'
 gsap.ticker.fps(60)
 
 export default class GameController {
-    static DS = { height: 550, width: 1000 }
+    static DS = { height: 550, width: 1000 } // defaultSize
 
     static GAME_EMITTER = new EventEmitter()
 
@@ -29,6 +29,8 @@ export default class GameController {
     static DISPATCH_BARRIERS = 'DISPATCH_BARRIERS'
     static CREATE_BARRIERS = 'CREATE_BARRIERS'
     static DELETE_BARRIERS = 'DELETE_BARRIERS'
+    static TOP_BARRIER = 'TOP'
+    static BOTTOM_BARRIER = 'BOTTOM'
 
 	static ADD_POINT = 'ADD_POINT'
 	static DELETE_SCORE = 'DELETE_SCORE'
@@ -148,18 +150,18 @@ export default class GameController {
             const shiftMultiple = Math.random() * 50 + 100
             const betweenMultiple = Math.random() * 50 + 150
 
-            const whoShift = Math.random() < 0.5 ? 'top' : 'bottom'
+            const whoShift = Math.random() < 0.5 ? GameController.TOP_BARRIER : GameController.BOTTOM_BARRIER
 
             const barrierTop = new Barrier(barrierTexture, {
-                direction: 'top',
-                shift: whoShift === 'top' ? -shiftMultiple : shiftMultiple,
-                between: whoShift === 'top' ? 0 : -betweenMultiple
-            })
+                direction: GameController.TOP_BARRIER,
+                shift: whoShift === GameController.TOP_BARRIER ? -shiftMultiple : shiftMultiple,
+                between: whoShift === GameController.TOP_BARRIER ? 0 : -betweenMultiple
+            }, this.character)
             const barrierBottom = new Barrier(barrierTexture, {
-                direction: 'bottom',
-                shift: whoShift === 'top' ? shiftMultiple : -shiftMultiple,
-                between: whoShift === 'top' ? betweenMultiple : 0
-            })
+                direction: GameController.BOTTOM_BARRIER,
+                shift: whoShift === GameController.BOTTOM_BARRIER ? -shiftMultiple : shiftMultiple,
+                between: whoShift === GameController.BOTTOM_BARRIER ? 0 : betweenMultiple
+            }, this.character)
 
 	        const scoreLine = new ScoreLine(
 				Texture.EMPTY,
@@ -256,6 +258,8 @@ export default class GameController {
     async createStartButton() {
         const startTexture = await Assets.load(startImage)
         const start = new StartBtn(startTexture)
+        start.activateEvents()
+        start.activateCustomEvents()
         this.app.stage.addChild(start)
     }
 

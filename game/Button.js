@@ -11,10 +11,9 @@ export class Button extends Sprite {
         this.pointerDown = this.pointerDown.bind(this)
 
         this.cursor = 'pointer'
+
         this.interactive = true
         this.buttonMode = true
-
-        this.activateEvents()
     }
 
     pointerDown() {
@@ -31,7 +30,7 @@ export class Button extends Sprite {
                 duration: this.DURATION * 0.5,
                 x: this.scale.x / this.MULTIPLE,
                 y: this.scale.y / this.MULTIPLE,
-                onComplete: () => callback()
+                onComplete: () => callback ? callback() : null
             }
         )
     }

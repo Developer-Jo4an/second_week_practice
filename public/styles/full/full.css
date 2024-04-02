@@ -4,7 +4,7 @@ html {
 }
 
 body {
-  width: 100vw;
+  width: 100%;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -234,6 +234,10 @@ template {
   align-items: center;
   padding: 20px;
   background-color: coral;
+}
+
+.header-hide {
+  display: none;
 }
 
 .header__nav-list {
@@ -609,6 +613,16 @@ template {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.bezier__canvas-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.bezier__canvas {
+  border: 10px solid black;
 }
 
 /*# sourceMappingURL=full.css.map */

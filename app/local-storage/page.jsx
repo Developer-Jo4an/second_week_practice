@@ -28,8 +28,7 @@ const Local = () => {
 	        >
 		        Очистить Local Storage
 	        </button>
-            {
-                !usersInLocalSt.length ?
+            { !usersInLocalSt.length ?
                     <span className={ 'storage__none-users-message' }>
                         Добавьте пользователей в хранилище на главной странице
                     </span>

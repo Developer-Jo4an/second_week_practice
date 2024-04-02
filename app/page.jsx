@@ -3,8 +3,11 @@ import { useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {
 	selectAppDeleteUser,
-	selectAppGetUsers, setAppDeleteUserAsync, setAppDeleteUserZeroingError,
-	setAppGetUsersAsync, setAppGetUsersZeroingError,
+	selectAppGetUsers,
+    setAppDeleteUserAsync,
+    setAppDeleteUserZeroingError,
+	setAppGetUsersAsync,
+    setAppGetUsersZeroingError,
 	setAppUsersToStorage
 } from '@/redux/slices/appSlice'
 import MainUser from '@/components/users/main-user/MainUser'
@@ -44,7 +47,7 @@ const Main = () => {
                 onClick={ () => dispatch(setAppGetUsersAsync()) }
             >GET USERS
             </button>
-            { users.length ?
+            { !!users.length &&
                 <ul className={ 'main__user-list' }>
                     { users.map(user => {
                         const inLocal = usersInLocal.some(customer => user.id === customer.id)
@@ -60,7 +63,7 @@ const Main = () => {
                             />
                         </li>
                     }) }
-                </ul> : ''
+                </ul>
 			}
             { (getUsersError || deleteUserError)
 	            &&
@@ -71,7 +74,7 @@ const Main = () => {
 			}
             { (isDeleteUserLoading || isGetUsersLoading)
 	            &&
-	            <Loader />
+                <Loader />
 			}
         </section>
     )
