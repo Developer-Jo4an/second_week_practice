@@ -1,63 +1,61 @@
 'use client'
-import { useEffect, useRef } from 'react'
-import { CubeMesh } from '@/cube/CubeMesh'
 import { gsap } from 'gsap'
+import { useEffect, useRef, useState } from 'react'
+import Loader from '@/components/loader/Loader'
+import * as CubeMesh from '@/cube/Cube'
+
 gsap.ticker.fps(60)
 
 const Cube = () => {
-    const area = useRef()
+	const area = useRef()
+	const reviveButton = useRef()
+	const lullButton = useRef()
 
-    useEffect(() => {
-        (async () => {
-            const {
-                Scene,
-                PerspectiveCamera,
-                WebGLRenderer,
-                Group
-            } = await import('three')
+	const [isLoading, setLoading] = useState(true)
 
-            const gameArea = area.current
-            const width = area.current.offsetWidth
-            const height = area.current.offsetHeight
+	useEffect(() => {
+		(async () => {
+			const { Scene, PerspectiveCamera, WebGLRenderer } = await import('three')
+			const width = area.current.offsetWidth
+			const height = area.current.offsetHeight
+			const scene = new Scene()
+			const camera = new PerspectiveCamera(75, width / height, 0.1, 1000)
+			camera.position.z = 5
 
-            const camera = new PerspectiveCamera(90, width / height, 0.1, 1000)
-            camera.position.z = 6
-            const scene = new Scene()
+			const { default: CubeController } = await import('@/cube/CubeController')
+			const cube = new CubeMesh.Cube(1, 1, 1, true, 'coral')
+			new CubeController(cube, reviveButton.current, lullButton.current)
+			scene.add(cube)
 
-            const group = new Group()
-            for (let i = 0; i < 3; i++) {
-                const cube = new CubeMesh(i + 0.5, i + 0.5, i + 0.5, 'pink')
-                group.add(cube)
-            }
-            scene.add(group)
+			const renderer = new WebGLRenderer()
+			renderer.setSize(width, height)
+			renderer.setAnimationLoop(renderAnimation)
+			area.current.append(renderer.domElement)
 
-            const rendered = new WebGLRenderer()
-            rendered.setSize(width, height)
-            rendered.setAnimationLoop(animation)
-            gameArea.append(rendered.domElement)
+			function renderAnimation() {
+				renderer.render(scene, camera)
+			}
 
-            let angle = 0
+			setLoading(false)
+		})()
+	}, [])
 
-            function animation() {
-                angle += 0.01
-
-                group.position.set(
-                    2 * Math.cos(angle),
-                    2 * Math.sin(angle),
-                    group.position.z
-                )
-
-                rendered.render(scene, camera)
-            }
-            gsap.ticker.add(animation)
-        })()
-    }, [])
-
-    return (
-        <section className={ 'cube page' }>
-            <div className={ 'cube__area' } ref={ area }></div>
-        </section>
-    )
+	return (
+		<section className={ 'cube page' }>
+			<div className={ 'cube__buttons' }>
+				<button
+					className={ 'cube__button button' }
+					ref={ reviveButton }
+				>Revive Cube</button>
+				<button
+					className={ 'cube__button button' }
+					ref={ lullButton }
+				>Lull Cube</button>
+			</div>
+			<div className={ 'cube__area' } ref={ area }></div>
+			{ isLoading && <Loader/> }
+		</section>
+	)
 }
 
 export default Cube

@@ -630,11 +630,18 @@ template {
 .cube {
   justify-content: center;
   align-items: center;
+  gap: 20px;
 }
 
 .cube__area {
   width: 800px;
   height: 800px;
+}
+
+.cube__buttons {
+  display: flex;
+  align-items: center;
+  gap: 20px;
 }
 
 /*# sourceMappingURL=full.css.map */
