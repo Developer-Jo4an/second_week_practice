@@ -21,18 +21,14 @@ const Cube = () => {
             const height = area.current.offsetHeight
 
             const camera = new PerspectiveCamera(90, width / height, 0.1, 1000)
-            camera.position.z = 3
+            camera.position.z = 6
             const scene = new Scene()
 
             const group = new Group()
-
-            const cube = new CubeMesh(1, 1, 1, 'pink')
-            const cube2 = new CubeMesh(0.5, 0.5, 0.5, 'red')
-            const cube3 = new CubeMesh(1.5, 1.5, 1.5, 'blue')
-
-            group.add(cube)
-            group.add(cube2)
-            group.add(cube3)
+            for (let i = 0; i < 3; i++) {
+                const cube = new CubeMesh(i + 0.5, i + 0.5, i + 0.5, 'pink')
+                group.add(cube)
+            }
             scene.add(group)
 
             const rendered = new WebGLRenderer()
@@ -48,12 +44,11 @@ const Cube = () => {
                 group.position.set(
                     2 * Math.cos(angle),
                     2 * Math.sin(angle),
-                    cube.position.z
+                    group.position.z
                 )
 
                 rendered.render(scene, camera)
             }
-
             gsap.ticker.add(animation)
         })()
     }, [])
