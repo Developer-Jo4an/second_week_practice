@@ -36,7 +36,7 @@ export default class GameController {
 	static DELETE_SCORE = 'DELETE_SCORE'
 
     constructor(app, container) {
-        if (!GameController.instance) GameController.instance = true
+        if (GameController.instance) return GameController.instance
 
         this.resizeToWindow = this.resizeToWindow.bind(this)
         this.startGame = this.startGame.bind(this)
@@ -53,6 +53,8 @@ export default class GameController {
 
         this.barriersArray = []
 	    this.scoreLinesArray = []
+
+        GameController.instance = this
     }
 
     async activateGame() {

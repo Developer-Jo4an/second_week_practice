@@ -618,11 +618,23 @@ template {
 .bezier__canvas-container {
   display: flex;
   justify-content: center;
+  flex-direction: column;
   align-items: center;
+  gap: 20px;
 }
 
 .bezier__canvas {
   border: 10px solid black;
+}
+
+.cube {
+  justify-content: center;
+  align-items: center;
+}
+
+.cube__area {
+  width: 800px;
+  height: 800px;
 }
 
 /*# sourceMappingURL=full.css.map */

@@ -12,7 +12,8 @@ const Header = () => {
         { href: '/session-storage', label: 'Session storage' },
         { href: '/add-user', label: 'Add user' },
         { href: '/game', label: 'Game' },
-        { href: '/bezier', label: 'Bezier' }
+        { href: '/bezier', label: 'Bezier' },
+        { href: '/cube', label: 'Cube' },
     ]
 
     return (
