@@ -8,7 +8,7 @@ gsap.ticker.fps(60)
 
 const Cube = () => {
 	const area = useRef()
-	const reviveButton = useRef()
+	const reviveButton = useRef() // todo: Стоит ли делать так? Может лучше иначе?
 	const lullButton = useRef()
 
 	const [isLoading, setLoading] = useState(true)
@@ -16,15 +16,17 @@ const Cube = () => {
 	useEffect(() => {
 		(async () => {
 			const { Scene, PerspectiveCamera, WebGLRenderer } = await import('three')
+			const { default: CubeController } = await import('@/cube/CubeController')
+
 			const width = area.current.offsetWidth
 			const height = area.current.offsetHeight
 			const scene = new Scene()
 			const camera = new PerspectiveCamera(75, width / height, 0.1, 1000)
 			camera.position.z = 5
 
-			const { default: CubeController } = await import('@/cube/CubeController')
 			const cube = new CubeMesh.Cube(1, 1, 1, true, 'coral')
-			new CubeController(cube, reviveButton.current, lullButton.current)
+			const controller = new CubeController(cube, reviveButton.current, lullButton.current)
+			controller.listenButtons()
 			scene.add(cube)
 
 			const renderer = new WebGLRenderer()

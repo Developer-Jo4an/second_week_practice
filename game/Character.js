@@ -13,7 +13,7 @@ export class Character extends Sprite {
 		this.characterBounce = this.characterBounce.bind(this)
 		this.moveAnimation = this.moveAnimation.bind(this)
 
-		this.speed = 1
+		this.zIndex = 2
 		this.height = GameController.DS.width * 0.05
 		this.width = GameController.DS.width * 0.05
 		this.anchor.set(0.5)
@@ -22,7 +22,7 @@ export class Character extends Sprite {
 			GameController.DS.height * 0.5,
 		)
 
-		this.zIndex = 2
+		this.speed = 1
 	}
 
 	isCollusion() {
